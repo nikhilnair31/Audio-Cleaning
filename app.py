@@ -12,8 +12,8 @@ s3 = boto3.client("s3")
 
 target_dBFS = os.environ.get("TARGET_DBFS")
 audio_codec = "mp3"
-filename_format = "{instrument}.{codec}"
 output_destination = "audio_output"
+filename_format = "{instrument}.{codec}"
 
 def normalize_audio(input_file, output_file):
     # Load the audio file using pydub
