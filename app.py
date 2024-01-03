@@ -10,7 +10,6 @@ from pydub import AudioSegment
 
 s3 = boto3.client("s3")
 
-target_dBFS = os.environ.get("TARGET_DBFS")
 audio_codec = "mp3"
 output_destination = "audio_output"
 filename_format = "{instrument}.{codec}"
@@ -20,31 +19,10 @@ def normalize_audio(input_file, output_file):
     audio = AudioSegment.from_file(input_file)
 
     # Normalize the loudness to -20 dBFS
-    normalized_audio = audio.normalize(target_dBFS=target_dBFS)
+    normalized_audio = audio.normalize()
 
     # Export the normalized audio to the output file
     normalized_audio.export(output_file, format=audio_codec)
-
-def remove_silence(input_file, output_file):
-    # Load the audio file using pydub
-    audio = AudioSegment.from_file(input_file)
-
-    # Convert the audio to 16-bit PCM format
-    pcm_data = audio.raw_data
-    sample_width = audio.sample_width * 8
-    sample_rate = audio.frame_rate
-    vad = webrtcvad.Vad()
-    vad.set_mode(1)  # Aggressive mode for better voice detection
-
-    # Apply VAD to the audio data
-    samples = audio.raw_data
-    is_speech = [vad.is_speech(samples[i:i + 2], sample_rate) for i in range(0, len(samples), 2)]
-
-    # Trim silent portions
-    trimmed_audio = audio._spawn(b''.join([samples[i:i + 2] for i in range(0, len(samples), 2) if is_speech[i // 2]]))
-
-    # Export the trimmed audio to the output file
-    trimmed_audio.export(output_file, format=audio_codec)
 
 @lambdawarmer.warmer
 def handler(event, context):
@@ -86,13 +64,9 @@ def handler(event, context):
             vocals_path = f"{output_destination_file_path}/{vocals_filename}"
             print(f"vocals_filename: {vocals_filename}\nvocals_path: {vocals_path}")
 
-            # Apply VAD to remove silent portions
-            vad_output_path = f"{output_destination_file_path}/vad_vocals.{audio_codec}"
-            remove_silence(vocals_path, vad_output_path)
-
             # Normalize the loudness of the vocals
             normalized_vocals_path = f"{output_destination_file_path}/normalized_vocals.{audio_codec}"
-            normalize_audio(vad_output_path, normalized_vocals_path)
+            normalize_audio(vocals_path, normalized_vocals_path)
 
             output_path = input_file.replace('recordings', 'cleaned_recordings').replace('m4a', 'mp3')
             print(f"output_path: {output_path}")
