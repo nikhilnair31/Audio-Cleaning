@@ -43,7 +43,7 @@ ENV MPLCONFIGDIR=/tmp/MPLCONFIGDIR/
 WORKDIR /var/task
 
 COPY requirements.txt ./
-RUN pip install openai==0.28.1
+RUN pip install pydub
 RUN pip install --no-cache-dir --upgrade -r requirements.txt && \
     find /var/lang/lib/python3.7/site-packages -name "*.dist-info"  -exec rm -rf {} \; | true && \
     find /var/lang/lib/python3.7/site-packages -name "*.egg-info"  -exec rm -rf {} \; | true && \

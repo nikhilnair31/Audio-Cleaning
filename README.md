@@ -1,4 +1,4 @@
-# Audio-Cleaning-Spleeter-Lambda
+# MIA-Audio-Pre-Lambda
 
 This repo can be built to create an image (3.35G uncompressed, 1.31G compressed) that can be used to run Spleeter, FFMPEG, and Python 3.7 on an AWS Lambda function. It comes pre-built with Spleeter's 2 stem pretrained models to split an input audio track into accompaniment and vocal output tracks.
 
