@@ -7,12 +7,30 @@ import boto3
 import logging
 import subprocess
 from pydub import AudioSegment
+from pydub.silence import split_on_silence
 
-s3 = boto3.client("s3")
+silence_threshold = os.environ.get('SILENCE_THRESHOLD')
 
 audio_codec = "mp3"
 output_destination = "audio_output"
 filename_format = "{instrument}.{codec}"
+
+s3 = boto3.client("s3")
+
+def remove_silence(input_file, output_file, silence_threshold=-40):
+    # Load the audio file
+    audio = AudioSegment.from_file(input_file)
+
+    # Split the audio based on silence
+    segments = split_on_silence(audio, silence_thresh=silence_threshold)
+
+    # Concatenate non-silent segments
+    output_audio = AudioSegment.silent()
+    for segment in segments:
+        output_audio += segment
+
+    # Export the result to a new file
+    output_audio.export(output_file, format=audio_codec)
 
 def normalize_audio(input_file, output_file):
     # Load the audio file using pydub
@@ -67,6 +85,10 @@ def handler(event, context):
             # Normalize the loudness of the vocals
             normalized_vocals_path = f"{output_destination_file_path}/normalized_vocals.{audio_codec}"
             normalize_audio(vocals_path, normalized_vocals_path)
+
+            # Normalize the loudness of the vocals
+            nonsilence_vocals_path = f"{output_destination_file_path}/nonsilence_vocals.{audio_codec}"
+            remove_silence(vocals_path, nonsilence_vocals_path, silence_threshold)
 
             output_path = input_file.replace('recordings', 'cleaned_recordings').replace('m4a', 'mp3')
             print(f"output_path: {output_path}")
