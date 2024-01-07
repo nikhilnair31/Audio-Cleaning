@@ -18,11 +18,11 @@ def remove_silence(input_file, output_file, silence_threshold=-40):
 
 if __name__ == "__main__":
     # Replace 'input_audio.wav' and 'output_audio.wav' with your input and output file paths
-    input_file = r'Data\recording_1704271665517.m4a'
+    input_file = r'Data\recording_06012024233332.m4a'
     output_file = r'Data\output_audio.wav'
 
     # Adjust the silence threshold if needed (default is -40 dB)
-    silence_threshold = -50
+    silence_threshold = -45
 
     remove_silence(input_file, output_file, silence_threshold)
     print(f"Silent sections removed. Result saved to {output_file}")

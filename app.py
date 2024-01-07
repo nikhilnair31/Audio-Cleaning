@@ -88,11 +88,11 @@ def handler(event, context):
 
             # Normalize the loudness of the vocals
             nonsilence_vocals_path = f"{output_destination_file_path}/nonsilence_vocals.{audio_codec}"
-            remove_silence(vocals_path, nonsilence_vocals_path, silence_threshold)
+            remove_silence(normalized_vocals_path, nonsilence_vocals_path, silence_threshold)
 
             output_path = input_file.replace('recordings', 'cleaned_recordings').replace('m4a', 'mp3')
             print(f"output_path: {output_path}")
-            s3.upload_file(normalized_vocals_path, input_bucket_name, output_path)
+            s3.upload_file(nonsilence_vocals_path, input_bucket_name, output_path)
 
             print("Lambda execution completed!")
         
