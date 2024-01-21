@@ -22,7 +22,7 @@ if __name__ == "__main__":
     output_file = r'Data\output_audio.wav'
 
     # Adjust the silence threshold if needed (default is -40 dB)
-    silence_threshold = -45
+    silence_threshold = -50
 
     remove_silence(input_file, output_file, silence_threshold)
     print(f"Silent sections removed. Result saved to {output_file}")
