@@ -1,4 +1,7 @@
-Data/*
+Data
+temp_chunks
+pretrained_models
+audio_cache
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
