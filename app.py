@@ -41,6 +41,12 @@ def remove_silence(input_file, output_file):
     output_audio = AudioSegment.silent()
     for segment in segments:
         output_audio += segment
+        
+    # Extract the directory path from the output file
+    output_dir = os.path.dirname(output_file)
+    # Create the output directory if it doesn't exist
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
     # Export the result to a new file
     output_audio.export(output_file, format=audio_codec)
@@ -56,7 +62,6 @@ def normalize_audio(input_file, output_file):
 
     # Extract the directory path from the output file
     output_dir = os.path.dirname(output_file)
-    
     # Create the output directory if it doesn't exist
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
