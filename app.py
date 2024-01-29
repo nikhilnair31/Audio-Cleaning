@@ -13,9 +13,6 @@ from pydub.silence import split_on_silence
 # General Related
 HUGGINGFACE_API_KEY = str(os.environ.get('HUGGINGFACE_API_KEY'))
 HUGGINGFACE_SPEECH_CHANNEL_URL = str(os.environ.get('HUGGINGFACE_SPEECH_CHANNEL_URL'))
-SPLIT_AUDIO = os.environ.get('SPLIT_AUDIO', 'False').lower() == 'true'
-NORMALIZE_AUDIO = os.environ.get('NORMALIZE_AUDIO', 'False').lower() == 'true'
-CLIP_SILENCE = os.environ.get('CLIP_SILENCE', 'False').lower() == 'true'
 SILENCE_THRESHOLD = os.environ.get('SILENCE_THRESHOLD')
 
 audio_codec = "mp3"
@@ -76,7 +73,7 @@ def handler(event, context):
     else:
         try:
             print(f'event\n{event}')
-            
+
             # Input
             input_file_obj = event["Records"][0]
             input_bucket_name = str(input_file_obj["s3"]["bucket"]["name"])
