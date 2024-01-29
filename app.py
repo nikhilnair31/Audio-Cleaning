@@ -54,6 +54,13 @@ def normalize_audio(input_file, output_file):
     # Normalize the loudness to -20 dBFS
     normalized_audio = audio.normalize()
 
+    # Extract the directory path from the output file
+    output_dir = os.path.dirname(output_file)
+    
+    # Create the output directory if it doesn't exist
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+        
     # Export the normalized audio to the output file
     normalized_audio.export(output_file, format=audio_codec)
 
