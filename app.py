@@ -75,6 +75,8 @@ def handler(event, context):
         return true
     else:
         try:
+            print(f'event\n{event}')
+            
             # Input
             input_file_obj = event["Records"][0]
             input_bucket_name = str(input_file_obj["s3"]["bucket"]["name"])
@@ -95,7 +97,7 @@ def handler(event, context):
 
             # Separated files, identifying vocals file path
             split_unsplit_audio_path = ''
-            if SPLIT_AUDIO:
+            if event["filtermusic"]=="true":
                 print(f"Splitting file at {input_lambda_file_path} now...")
                 split_audio(input_lambda_file_path)
                 split_unsplit_audio_path = f"{output_destination_file_path}/vocals.{audio_codec}"
@@ -105,7 +107,7 @@ def handler(event, context):
 
             # Normalize the loudness of the vocals
             normalized_unnormalized_audio_path = ''
-            if NORMALIZE_AUDIO:
+            if event["normalizeloudness"]=="true":
                 print(f"Normalizing file at {split_unsplit_audio_path} now...")
                 normalized_unnormalized_audio_path = f"{output_destination_file_path}/normalized_vocals.{audio_codec}"
                 normalize_audio(split_unsplit_audio_path, normalized_unnormalized_audio_path)
@@ -115,7 +117,7 @@ def handler(event, context):
 
             # Normalize the loudness of the vocals
             clipped_unclipped_audio_path = ''
-            if CLIP_SILENCE:
+            if event["removesilence"]=="true":
                 print(f"Clipping file at {normalized_vocals_path} now...")
                 clipped_unclipped_audio_path = f"{output_destination_file_path}/nonsilence_vocals.{audio_codec}"
                 remove_silence(normalized_vocals_path, clipped_unclipped_audio_path)
