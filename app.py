@@ -46,7 +46,7 @@ def remove_silence(input_file, output_file):
     output_audio.export(output_file, format=audio_codec)
 
 def normalize_audio(input_file, output_file):
-    print(f'normalize_audio\ninput_path: {input}\noutput_path: {output}')
+    print(f'normalize_audio\ninput_path: {input_file}\noutput_path: {output_file}')
     
     # Load the audio file using pydub
     audio = AudioSegment.from_file(input_file)
