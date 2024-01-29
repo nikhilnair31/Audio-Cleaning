@@ -60,7 +60,7 @@ def normalize_audio(input_file, output_file):
     # Create the output directory if it doesn't exist
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-        
+
     # Export the normalized audio to the output file
     normalized_audio.export(output_file, format=audio_codec)
 
@@ -124,9 +124,9 @@ def handler(event, context):
             # Normalize the loudness of the vocals
             clipped_unclipped_audio_path = ''
             if event["removesilence"]=="true":
-                print(f"Clipping file at {normalized_vocals_path} now...")
+                print(f"Clipping file at {normalized_unnormalized_audio_path} now...")
                 clipped_unclipped_audio_path = f"{output_destination_file_path}/nonsilence_vocals.{audio_codec}"
-                remove_silence(normalized_vocals_path, clipped_unclipped_audio_path)
+                remove_silence(normalized_unnormalized_audio_path, clipped_unclipped_audio_path)
             else:
                 clipped_unclipped_audio_path = normalized_unnormalized_audio_path
             print(f"clipped_unclipped_audio_path: {clipped_unclipped_audio_path}")
